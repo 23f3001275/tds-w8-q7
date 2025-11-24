@@ -5,43 +5,45 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# -------------------------
-# 1. CREATE / LOAD DATA
-# -------------------------
+# ---------------------------------------------------
+# 1) LOAD EMPLOYEE DATA (FROM PROVIDED CSV SAMPLE)
+# ---------------------------------------------------
 
-# Sample dataset of 100 employees
-data = {
-    "Employee_ID": range(1, 101),
-    "Department": [
-        "Finance", "Operations", "HR", "IT", "Sales", "Marketing", "Legal", "R&D"
-    ] * 12 + ["Finance", "Operations", "IT", "HR"]
-}
+from io import StringIO
 
-df = pd.DataFrame(data)
+csv_data = """employee_id,department,region,performance_score,years_experience,satisfaction_rating
+EMP001,Operations,Europe,87.22,9,4.2
+EMP002,IT,North America,69.31,10,3.8
+EMP003,Operations,Europe,83.3,3,4.9
+EMP004,Sales,Europe,82.36,14,3.7
+EMP005,Operations,Europe,71.31,6,3.1
+"""
 
-# -------------------------
-# 2. CALCULATE FREQUENCY COUNT FOR FINANCE
-# -------------------------
+df = pd.read_csv(StringIO(csv_data))
 
-finance_count = (df["Department"] == "Finance").sum()
-print("Frequency count of Finance department:", finance_count)
+# ---------------------------------------------------
+# 2) FREQUENCY COUNT FOR FINANCE DEPARTMENT
+# ---------------------------------------------------
 
-# -------------------------
-# 3. CREATE HISTOGRAM
-# -------------------------
+finance_count = (df["department"] == "Finance").sum()
+print("Frequency count for Finance department:", finance_count)
+
+# ---------------------------------------------------
+# 3) HISTOGRAM OF DEPARTMENTS
+# ---------------------------------------------------
 
 plt.figure(figsize=(8,5))
-sns.countplot(x="Department", data=df, palette="viridis")
+sns.countplot(x="department", data=df, palette="muted")
 plt.title("Employee Count per Department")
 plt.xticks(rotation=45)
 plt.tight_layout()
 
-# Save plot
+# Save the histogram image
 plt.savefig("histogram.png")
 
-# -------------------------
-# 4. SAVE OUTPUT AS HTML
-# -------------------------
+# ---------------------------------------------------
+# 4) GENERATE HTML FILE
+# ---------------------------------------------------
 
 html_content = f"""
 <html>
@@ -55,7 +57,7 @@ html_content = f"""
 </html>
 """
 
-with open("employee_analysis.html", "w") as file:
-    file.write(html_content)
+with open("employee_analysis.html", "w") as f:
+    f.write(html_content)
 
 print("HTML file generated: employee_analysis.html")
